@@ -128,3 +128,169 @@ export interface SystemSettings {
   primaryTimezone: string;
   isDemoMode: boolean;
 }
+
+// ==========================================
+// BAREWA DEV FORCE & BAP (BAREWA AGENT PROTOCOL)
+// ==========================================
+
+export type AgentStatus = 'online' | 'busy' | 'degraded' | 'offline' | 'unknown';
+
+export type AgentActivityState =
+  | 'idle'
+  | 'thinking'
+  | 'working'
+  | 'waiting'
+  | 'approval_requested'
+  | 'finished'
+  | 'error';
+
+export type AgentRole =
+  | 'dev'
+  | 'architect'
+  | 'qa'
+  | 'security'
+  | 'database'
+  | 'devops'
+  | 'product';
+
+export interface BarewaAgent {
+  agent_id: string;
+  name: string;
+  role: AgentRole;
+  unit: string;
+  status: AgentStatus;
+  activityState: AgentActivityState;
+  modelUsed: string;
+  avatar: string;
+  capabilities: string[];
+  tools: string[];
+  currentMissionId?: string;
+  lastActivity: string;
+  authorizationLevel: 'L1_OBSERVER' | 'L2_DEVELOPER' | 'L3_MAINTAINER' | 'L4_ADMIN_COCKPIT';
+  metrics: {
+    tasksCompleted: number;
+    successRate: number;
+    avgLatencyMs: number;
+  };
+}
+
+export type ConversationType = 'INDIVIDUAL' | 'TEAM' | 'MISSION';
+
+export interface ChatMessage {
+  id: string;
+  conversationId?: string;
+  senderId: string; // 'user' or agent_id
+  senderName: string;
+  senderRole?: string;
+  senderAvatar?: string;
+  text: string;
+  timestamp: string;
+  replyToMessageId?: string;
+  actionPayload?: {
+    type: 'MISSION_PROPOSAL' | 'APPROVAL_REQUEST' | 'CODE_DIFF' | 'TEST_REPORT' | 'SECURITY_ALERT';
+    data: Record<string, unknown>;
+  };
+  requiresApproval?: boolean;
+  approvalId?: string;
+}
+
+export interface Conversation {
+  conversation_id: string;
+  title: string;
+  type: ConversationType;
+  participants: string[];
+  applicationConcerned: string;
+  mission_id?: string;
+  messages: ChatMessage[];
+  createdAt: string;
+  updatedAt: string;
+  status: 'ACTIVE' | 'ARCHIVED';
+}
+
+export interface DevForceMission {
+  mission_id: string;
+  title: string;
+  objective: string;
+  application: string;
+  priority: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+  risk: 'LOW' | 'MEDIUM' | 'HIGH' | 'RESTRICTED';
+  status: 'PENDING' | 'IN_PROGRESS' | 'WAITING_APPROVAL' | 'TESTING' | 'DEPLOYING' | 'COMPLETED' | 'BLOCKED';
+  assignedAgents: string[];
+  constraints: string[];
+  progress: number;
+  prUrl?: string;
+  testResults?: {
+    total: number;
+    passed: number;
+    failed: number;
+    coverage: string;
+  };
+  deploymentStatus?: 'PENDING' | 'STAGING' | 'PRODUCTION';
+  conversationId?: string;
+  createdAt: string;
+  updatedAt?: string;
+  finalReport?: string;
+}
+
+export interface ApprovalRequest {
+  id: string;
+  mission_id?: string;
+  requesterAgentId: string;
+  requesterAgentName: string;
+  title: string;
+  description: string;
+  targetResource: string;
+  riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+  proposedDiff?: string;
+  status: 'PENDING' | 'APPROVED' | 'REJECTED';
+  decidedAt?: string;
+  decidedBy?: string;
+  decisionNotes?: string;
+  createdAt: string;
+}
+
+export interface BAPEvent {
+  id: string;
+  timestamp: string;
+  agentId: string;
+  agentName: string;
+  agentRole?: AgentRole | string;
+  eventType:
+    | 'HEARTBEAT'
+    | 'TASK_STARTED'
+    | 'ANALYSIS'
+    | 'CODE_GENERATION'
+    | 'SCHEMA_CHECK'
+    | 'APPROVAL_REQUIRED'
+    | 'TEST_RUN'
+    | 'PR_OPENED'
+    | 'DEPLOYED'
+    | 'STATUS_UPDATE'
+    | 'ERROR';
+  description: string;
+  missionId?: string;
+  state?: AgentActivityState;
+}
+
+export interface BAPProtocolConfig {
+  version: string;
+  gatewayStatus: 'HEALTHY' | 'DEGRADED' | 'DISCONNECTED';
+  primaryAdapter: 'crewai' | 'langgraph' | 'autogen' | 'custom_worker';
+  registeredUnits: {
+    id: string;
+    name: string;
+    adapterType: string;
+    agentCount: number;
+    heartbeatIntervalSec: number;
+    status: AgentStatus;
+  }[];
+  memoryStats: {
+    globalEntries: number;
+    unitEntries: number;
+    agentEntries: number;
+    conversationEntries: number;
+    missionEntries: number;
+    auditEntries: number;
+  };
+}
+

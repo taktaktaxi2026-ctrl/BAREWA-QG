@@ -13,12 +13,13 @@ import {
   Activity,
   Sliders,
   LayoutDashboard,
+  Bot,
 } from 'lucide-react';
 import { BarewaAlert } from '@/types/barewa';
 
 interface TopBarProps {
-  activeTab: 'dashboard' | 'ecosystem' | 'intelligence' | 'flux' | 'control';
-  onTabChange: (tab: 'dashboard' | 'ecosystem' | 'intelligence' | 'flux' | 'control') => void;
+  activeTab: 'dashboard' | 'ecosystem' | 'intelligence' | 'flux' | 'control' | 'devforce';
+  onTabChange: (tab: 'dashboard' | 'ecosystem' | 'intelligence' | 'flux' | 'control' | 'devforce') => void;
   alerts: BarewaAlert[];
   onOpenAlerts: () => void;
   onOpenSecurity: () => void;
@@ -42,6 +43,7 @@ export function TopBar({
 
   const navItems = [
     { id: 'dashboard', label: 'Tableau de bord', icon: LayoutDashboard },
+    { id: 'devforce', label: 'DEV FORCE', icon: Bot },
     { id: 'ecosystem', label: 'Écosystème', icon: Layers },
     { id: 'intelligence', label: 'Intelligence', icon: Sparkles },
     { id: 'flux', label: 'Flux', icon: Activity },

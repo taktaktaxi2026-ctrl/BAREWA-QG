@@ -22,7 +22,7 @@ interface DashboardTabProps {
   services: BarewaService[];
   alerts: BarewaAlert[];
   events: EcosystemEvent[];
-  onNavigateTab: (tab: 'ecosystem' | 'intelligence' | 'flux' | 'control') => void;
+  onNavigateTab: (tab: 'ecosystem' | 'intelligence' | 'flux' | 'control' | 'devforce') => void;
   onOpenAlerts: () => void;
 }
 
@@ -90,6 +90,37 @@ export function DashboardTab({
             <ArrowUpRight className="w-4 h-4" />
           </button>
         </div>
+      </div>
+
+      {/* DEV FORCE Spotlight Banner */}
+      <div className="p-3 sm:p-3.5 rounded-xl bg-gradient-to-r from-red-950/60 via-slate-900 to-amber-950/40 border border-red-900/60 flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-lg bg-red-600/20 border border-red-500/40 text-red-400 flex items-center justify-center font-bold text-base">
+            ⚔️
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold text-white font-serif">
+                Unité Autonome BAREWA DEV FORCE & Passerelle BAP
+              </span>
+              <span className="px-1.5 py-0.2 rounded bg-emerald-950 border border-emerald-800 text-emerald-400 text-[9px] font-mono">
+                6/6 Agents Prêts
+              </span>
+            </div>
+            <p className="text-[11px] text-slate-300">
+              Command Center multi-agents activé : Chat direct, War Room collaborative, Supervision live et Approbation QG.
+            </p>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => onNavigateTab('devforce')}
+          className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-red-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-bold text-xs flex items-center gap-1.5 transition-all shadow-sm"
+        >
+          <span>Accéder au Command Center DEV FORCE</span>
+          <ArrowUpRight className="w-3.5 h-3.5" />
+        </button>
       </div>
 
       {/* Primary KPI Grid (6 Dense Cards) */}
