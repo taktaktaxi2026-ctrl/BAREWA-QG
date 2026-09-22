@@ -1,0 +1,6 @@
+{
+  "name": "BAREWA QG",
+  "description": "Centre de contrôle, de supervision et de pilotage privé et sécurisé de l'écosystème numérique BAREWA.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
